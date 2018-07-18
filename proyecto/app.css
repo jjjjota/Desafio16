@@ -1,0 +1,73 @@
+/* IMPORTS */
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+/* GENERAL */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font: 16px/1.5 'Montserrat', sans-serif;
+}
+
+h1 {
+  margin-bottom: 20px;
+  border-bottom: 5px solid #004f5f;
+  font-size: 1.8rem;
+  text-align: right;
+}
+
+/* GRID */
+.gridContainer {
+  display: grid;
+  grid-template-areas:  '. . . . .'
+                        '. v . c .';
+  grid-template-columns: 6vw 30vw 4vw auto 6vw;
+  grid-template-rows: 15vh auto;
+}
+
+/* VALUES */
+.gridContainer > .values {
+  grid-area: v;
+}
+
+
+.values > table {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.values td, .values th {
+  text-align: center;
+  padding: 10px;
+}
+
+.values th {
+  color: #004f5f;
+}
+
+
+/* CONVERTOR */
+.gridContainer > .convertor {
+  grid-area: c;
+}
+
+.convertor > ul {
+  display: flex;
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.convertor li {
+  margin-left: 30px;
+}
+
+.convertor > ul ul {
+  list-style: none;
+}
+
+.convertor > ul ul > li {
+  margin: 0;
+}
