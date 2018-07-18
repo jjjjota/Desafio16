@@ -1,15 +1,140 @@
 <!DOCTYPE html>
 <html>
+
+
 <head>
-  <meta charset="utf-8">
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Consumir Indicadores Económicos</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="app.css">
+
 </head>
+
+
 <body>
+  <div class="gridContainer" id="app">
+
+    <section class="values">
+      <h1>VALORES ACTUALES</h1>
+      <table>
+        <tr>
+          <th>Moneda</th>
+          <th>Valor</th>
+        </tr>
+        <tr v-for="v in values">
+          <td> {{ v.currency }} </td>
+          <td> {{ '$' + v.value }} </td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="convertor">
+      <h1>CONVERTOR DE UNIDADES</h1>
+
+      <h3>CLP a USD y EUR</h3>
+      <ul>
+        <li><input class="input" type="number" name="" value="" placeholder="0" v-model.number="inputTop"/></li>
+        <li><input class="button button--top" type="submit" name="" value=">"/></li>
+        <li>
+          <ul>
+            <li class="clpToUsd"></li>
+            <li class="clpToEur"></li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>USD a CLP</h3>
+      <ul>
+        <li><input class="input" type="number" name="" value="" placeholder="0" v-model.number="inputBottom"/></li>
+        <li><input class="button button--bottom" type="submit" name="" value=">"/></li>
+        <li class="usdToClp"></li>
+      </ul>
+    </section>
+
+  </div>
+
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script type="text/javascript" src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+<script>
+
+// Variables de datos
+var d = new Date(),
+    day = d.getDate() < 10 ? `0${d.getDate()}` : d.getDate(),
+    month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth(),
+    today = `${day}-${month}-${d.getFullYear()}`;
+
+// Aplicación Vue
+var app = new Vue({
+  el: '#app',
+  data: {
+    today: today,
+    values: [
+      { currency: 'USD', code: 'dolar', value: null },
+      { currency: 'EUR', code: 'euro' , value: null },
+      { currency: 'UF' , code: 'uf'   , value: null },
+      { currency: 'UTM', code: 'utm'  , value: null }
+    ],
+    inputTop: null,
+    inputBottom: null
+  },
+  methods: {
+    get: function(code) {
+      this.$http.get(`https://mindicador.cl/api/${code}/${this.today}`)
+        .then(function(response) {
+          if ( code =='dolar' ) {
+            this.values[0].value = response.body.serie[0].valor;
+          } else if ( code == 'euro' ) {
+            this.values[1].value = response.body.serie[0].valor;
+          } else if ( code == 'uf' ) {
+            this.values[2].value = response.body.serie[0].valor;
+          } else if ( code == 'utm' ) {
+            this.values[3].value = response.body.serie[0].valor;
+          }
+        });
+    },
+    clpTo: function(currency) {
+      clp = this.inputTop;
+      currency == 'usd' ? value = this.values[0].value : value = this.values[1].value;
+      return (clp / value).toFixed(2);
+    },
+    usdTo: function() {
+      usd = this.inputBottom;
+      usdValue = this.values[0].value;
+      return (usd * usdValue).toFixed(2);
+    }
+
+  },
+  created: function() {
+    this.get(this.values[0].code);
+    this.get(this.values[1].code);
+    this.get(this.values[2].code);
+    this.get(this.values[3].code);
+  }
+})
+
+// Click event
+var btnTop = $(".button--top"),
+    btnBottom = $(".button--bottom"),
+    clpToUsd = $(".clpToUsd"),
+    clpToEur = $(".clpToEur"),
+    usdToClp = $(".usdToClp")
+
+btnTop.click(function() {
+  clpToUsd.text(app.clpTo('usd') + ' USD');
+  clpToEur.text(app.clpTo('eur') + ' EUR');
+})
+
+btnBottom.click(function() {
+  usdToClp.text(app.usdTo() + ' CLP');
+})
+
+</script>
+
 </body>
+
+
 </html>
