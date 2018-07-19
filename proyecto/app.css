@@ -12,7 +12,7 @@
 }
 
 h1 {
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   border-bottom: 5px solid #004f5f;
   font-size: 1.8rem;
   text-align: right;
@@ -21,15 +21,13 @@ h1 {
 /* GRID */
 .gridContainer {
   display: grid;
-  grid-template-areas:  '. . . . .'
-                        '. v . c .';
-  grid-template-columns: 6vw 30vw 4vw auto 6vw;
-  grid-template-rows: 15vh auto;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
 }
 
 /* VALUES */
 .gridContainer > .values {
-  grid-area: v;
+  padding: 50px 5vw;
 }
 
 
@@ -51,23 +49,54 @@ h1 {
 
 /* CONVERTOR */
 .gridContainer > .convertor {
-  grid-area: c;
+  padding: 50px 5vw;
 }
 
 .convertor > ul {
   display: flex;
   list-style: none;
-  margin-bottom: 30px;
-}
-
-.convertor li {
-  margin-left: 30px;
+  height: 80px;
 }
 
 .convertor > ul ul {
   list-style: none;
 }
 
-.convertor > ul ul > li {
-  margin: 0;
+.convertor__item {
+  margin-right: 20px;
+}
+
+.convertor input[type=number] {
+  width: 100px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.convertor .button {
+  width: 30px;
+  border: none;
+  border-radius: 3px;
+  padding: 2px;
+  cursor: pointer;
+  background: linear-gradient(to right, #94FCFF, #A1FF94);
+}
+
+@media (min-width: 700px) {
+  .gridContainer {
+    grid-template-areas:  '. . . . .'
+                          '. v . c .';
+    grid-template-columns:8vw 34vw 4vw 46vw 8vw;
+    grid-template-rows: 15vh auto;
+  }
+
+  .gridContainer > .values {
+    grid-area: v;
+    padding: 0;
+  }
+
+  .gridContainer > .convertor {
+    grid-area: c;
+    padding: 0;
+  }
 }

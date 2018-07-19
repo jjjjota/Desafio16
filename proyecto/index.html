@@ -34,21 +34,21 @@
 
       <h3>CLP a USD y EUR</h3>
       <ul>
-        <li><input class="input" type="number" name="" value="" placeholder="0" v-model.number="inputTop"/></li>
-        <li><input class="button button--top" type="submit" name="" value=">"/></li>
-        <li>
+        <li class="convertor__item"><input class="input" type="number" name="" value="" placeholder="0" v-model.number="inputTop"/></li>
+        <li class="convertor__item"><input class="button button--top" type="submit" name="" value=">"/></li>
+        <li class="convertor__item">
           <ul>
-            <li class="clpToUsd"></li>
-            <li class="clpToEur"></li>
+            <li><span class="clpToUsd"></span> USD</li>
+            <li><span class="clpToEur"></span> EUR</li>
           </ul>
         </li>
       </ul>
 
       <h3>USD a CLP</h3>
       <ul>
-        <li><input class="input" type="number" name="" value="" placeholder="0" v-model.number="inputBottom"/></li>
-        <li><input class="button button--bottom" type="submit" name="" value=">"/></li>
-        <li class="usdToClp"></li>
+        <li class="convertor__item"><input class="input" type="number" name="" value="" placeholder="0" v-model.number="inputBottom"/></li>
+        <li class="convertor__item"><input class="button button--bottom" type="submit" name="" value=">"/></li>
+        <li class="convertor__item"><span class="usdToClp"></span> CLP</li>
       </ul>
     </section>
 
@@ -124,12 +124,12 @@ var btnTop = $(".button--top"),
     usdToClp = $(".usdToClp")
 
 btnTop.click(function() {
-  clpToUsd.text(app.clpTo('usd') + ' USD');
-  clpToEur.text(app.clpTo('eur') + ' EUR');
+  clpToUsd.text(app.clpTo('usd'));
+  clpToEur.text(app.clpTo('eur'));
 })
 
 btnBottom.click(function() {
-  usdToClp.text(app.usdTo() + ' CLP');
+  usdToClp.text(app.usdTo());
 })
 
 </script>
