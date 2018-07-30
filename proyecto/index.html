@@ -61,73 +61,74 @@
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 <script>
 
-// Variables de datos
-var d = new Date(),
-    day = d.getDate() < 10 ? `0${d.getDate()}` : d.getDate(),
-    month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth(),
-    today = `${day}-${month}-${d.getFullYear()}`;
+// Variables de datos del día
+// var d = new Date(),
+//     day = d.getDate() < 10 ? `0${d.getDate()}` : d.getDate(),
+//     month = d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth(),
+//     today = `${day}-${month}-${d.getFullYear()}`;
 
 // Aplicación Vue
 var app = new Vue({
   el: '#app',
   data: {
-    today: today,
+    // today: today,
     values: [
-      { currency: 'USD', code: 'dolar', value: null },
-      { currency: 'EUR', code: 'euro' , value: null },
-      { currency: 'UF' , code: 'uf'   , value: null },
-      { currency: 'UTM', code: 'utm'  , value: null }
+      { currency: 'USD', code: 'dolar', value: 0 },
+      { currency: 'EUR', code: 'euro' , value: 0 },
+      { currency: 'UF' , code: 'uf'   , value: 0 },
+      { currency: 'UTM', code: 'utm'  , value: 0 }
     ],
     inputTop: null,
     inputBottom: null
   },
   methods: {
-    get: function(code) {
-      this.$http.get(`https://mindicador.cl/api/${code}/${this.today}`)
-        .then(function(response) {
+    request: function(code) {
+      this.$http.get(`https://mindicador.cl/api/${code}`)
+        .then(function(data) {
           if ( code =='dolar' ) {
-            this.values[0].value = response.body.serie[0].valor;
+            this.values[0].value = data.body.serie[0].valor;
           } else if ( code == 'euro' ) {
-            this.values[1].value = response.body.serie[0].valor;
+            this.values[1].value = data.body.serie[0].valor;
           } else if ( code == 'uf' ) {
-            this.values[2].value = response.body.serie[0].valor;
+            this.values[2].value = data.body.serie[0].valor;
           } else if ( code == 'utm' ) {
-            this.values[3].value = response.body.serie[0].valor;
+            this.values[3].value = data.body.serie[0].valor;
           }
         });
     },
     clpTo: function(currency) {
-      clp = this.inputTop;
-      currency == 'usd' ? value = this.values[0].value : value = this.values[1].value;
-      return (clp / value).toFixed(2);
+      clpAmount = this.inputTop;
+      currency == 'usd' ? currencyValue = this.values[0].value : currencyValue = this.values[1].value;
+      return (clpAmount / currencyValue).toFixed(2);
     },
     usdTo: function() {
-      usd = this.inputBottom;
+      usdAmount = this.inputBottom;
       usdValue = this.values[0].value;
-      return (usd * usdValue).toFixed(2);
+      return (usdAmount * usdValue).toFixed(2);
     }
-
   },
   created: function() {
-    this.get(this.values[0].code);
-    this.get(this.values[1].code);
-    this.get(this.values[2].code);
-    this.get(this.values[3].code);
+    this.request(this.values[0].code);
+    this.request(this.values[1].code);
+    this.request(this.values[2].code);
+    this.request(this.values[3].code);
   }
 })
 
-// Click event
+// Varioables para el convertor de unidades
 var btnTop = $(".button--top"),
     btnBottom = $(".button--bottom"),
     clpToUsd = $(".clpToUsd"),
     clpToEur = $(".clpToEur"),
     usdToClp = $(".usdToClp")
 
+// Click en el botón superior
 btnTop.click(function() {
   clpToUsd.text(app.clpTo('usd'));
   clpToEur.text(app.clpTo('eur'));
 })
 
+// Click en el botón inferior
 btnBottom.click(function() {
   usdToClp.text(app.usdTo());
 })
