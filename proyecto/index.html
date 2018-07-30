@@ -85,6 +85,7 @@ var app = new Vue({
     request: function(code) {
       this.$http.get(`https://mindicador.cl/api/${code}`)
         .then(function(data) {
+          console.log(data);
           if ( code =='dolar' ) {
             this.values[0].value = data.body.serie[0].valor;
           } else if ( code == 'euro' ) {
